@@ -1,3 +1,26 @@
+/// template 1
+int operator*(const pii& x, const pii& y) {return x.fi * y.se - y.fi * x.se;}
+pii operator-(const pii& x, const pii& y) {return {x.fi - y.fi, x.se - y.se};}
+int ccw(const pii& a, const pii& b, const pii& c) {return (c - b) * (b - a);}
+vector<pii> hull; int sz, low, high, mid, type, ptr, res; /// type = 1 -> dec a, -1 -> inc a
+void init(int _type) {type = _type, hull.clear(), sz = ptr = 0;}
+void push(const pii& p) {
+    for(; sz > 1 && ccw(hull[sz - 2], hull[sz - 1], p) * type >= 0; hull.pop_back(), --sz);
+    hull.pb(p); ++sz;
+}
+int val(int i, int x) {return (i < sz && i >= 0)? hull[i].fi * x + hull[i].se: -inf;}
+int get(int x) {
+    if(hull.empty()) return -inf;
+    low = 0, high = sz - 1;
+    while(low <= high) {
+        mid = (low + high) >> 1;
+        if(val(mid, x) <= val(mid + 1, x)) low = mid + 1;
+        else high = mid - 1;
+    }
+    return max(val(low, x), val(high, x));
+}
+
+/// template 2
 #include <bits/stdc++.h>
 #define pb          emplace_back
 #define ll          long long
