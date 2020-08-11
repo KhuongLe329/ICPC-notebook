@@ -1,1 +1,1 @@
-Template ACM
+Template
