@@ -1,4 +1,4 @@
-/// template 1
+/// template 1, bỏ đường thẳng ra khỏi bao lồi khi tung độ (di, d) < (di-1, d), biến đổi ct -> thành công thức ccw
 int operator*(const pii& x, const pii& y) {return x.fi * y.se - y.fi * x.se;}
 pii operator-(const pii& x, const pii& y) {return {x.fi - y.fi, x.se - y.se};}
 int ccw(const pii& a, const pii& b, const pii& c) {return (c - b) * (b - a);}
