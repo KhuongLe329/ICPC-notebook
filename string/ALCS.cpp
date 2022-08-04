@@ -1,58 +1,53 @@
+/*
+    https://codeforces.com/gym/103652/problem/F
+    copied from teapotd
+*/
 #include <bits/stdc++.h>
+#define pb          emplace_back
+#define ll          long long
+#define fi          first
+#define se          second
+#define mp          make_pair
+//#define int         int64_t
+
 using namespace std;
-using ll  = long long;
-using Vi  = vector<int>;
-using Pii = pair<int,int>;
-#define mp make_pair
-#define pb push_back
-#define x  first
-#define y  second
-#define rep(i,b,e) for(int i=(b); i<(e); i++)
-#define each(a,x)  for(auto& a : (x))
-#define all(x)     (x).begin(),(x).end()
-#define sz(x)      int((x).size())
-#define tem template<class t,class u,class...w> auto
-#define pri(x,y,z) tem operator<<(t&o,u a)->decltype(z,o) { o << *x; y; z; return o << x[1]; }
-pri("{}",, a.print())
-pri("()",, o << a.x << ", " << a.y)
-pri("[]", auto d=""; for (auto i : a) (o << d << i, d = ", "), all(a))
-void DD(...) {}
-tem DD(t s, u a, w... k) {
-    for (int b=1; cerr << *s++, *s && *s - b*44;) b += 2 / (*s*2 - 81);
-    cerr << ": " << a; DD(s, k...);
-}
-#ifdef LOC
-#define deb(...) DD("[,\b :] "#__VA_ARGS__, __LINE__, __VA_ARGS__), cerr << endl
-#else
-#define deb(...)
-#endif
-#define DBP(...) void print() { DD(#__VA_ARGS__, __VA_ARGS__); }
+
+const int N = (int)3e3 + 3;
+const int M = N / 64 + 1;
+const int nAlpha = 'z' - 'a';
+const int mod = 998244353;
+typedef pair<int, int> pii;
+typedef long double ld;
+typedef unsigned long long ull;
 
 struct ALCS {
 	string A, B;
-	vector<Vi> ih;
+	vector<vector<int>> ih;
 
 	ALCS() {}
 
 	ALCS(string s, string t) : A(s), B(t) {
-		int n = sz(A), m = sz(B);
-		vector<Vi> iv(n+1, Vi(m+1));
-		ih.resize(n+1, Vi(m+1));
-		iota(all(ih[0]), 0);
-		rep(l, 1, n+1) rep(j, 1, m+1) {
-			if (A[l-1] != B[j-1]) {
-				ih[l][j] = max(iv[l][j-1], ih[l-1][j]);
-				iv[l][j] = min(iv[l][j-1], ih[l-1][j]);
-			} else {
-				ih[l][j] = iv[l][j-1];
-				iv[l][j] = ih[l-1][j];
-			}
+		int n = A.size(), m = B.size();
+		vector<vector<int>> iv(n+1, vector<int>(m+1));
+		ih.resize(n+1, vector<int>(m+1));
+		iota(ih[0].begin(), ih[0].end(), 0);
+		for(int l = 1; l <= n; ++l) {
+            for(int j = 1; j <= m; ++j) {
+                if (A[l-1] != B[j-1]) {
+                    ih[l][j] = max(iv[l][j-1], ih[l-1][j]);
+                    iv[l][j] = min(iv[l][j-1], ih[l-1][j]);
+                } else {
+                    ih[l][j] = iv[l][j-1];
+                    iv[l][j] = ih[l-1][j];
+                }
+            }
 		}
 	}
 
 	int operator()(int i, int j, int k) {
 		int ret = 0;
-		rep(q, j, k) ret += (ih[i][q+1] <= j);
+		for(int q = j; q < k; ++q)
+            ret += (ih[i][q+1] <= j);
 		return ret;
 	}
 
@@ -60,40 +55,44 @@ struct ALCS {
 		string ret;
 		while (i > 0 && j < k) {
 			if (ih[i][k--] <= j) {
-				ret.pb(B[k]);
+				ret.push_back(B[k]);
 				while (A[--i] != B[k]);
 			}
 		}
-		reverse(all(ret));
+		reverse(ret.begin(), ret.end());
 		return ret;
 	}
 };
 
-void run() {
-	string s; cin >> s;
+void solve() {
+    string s; cin >> s;
 	ALCS alcs(s, s);
 	int bestMid = -1, best = -1;
 
-	rep(mid, 0, sz(s)) {
-		int alt = alcs(mid, mid, sz(s));
+	for(int mid = 0; mid < (int)s.size(); ++mid) {
+		int alt = alcs(mid, mid, (int)s.size());
 		if (alt > best) {
 			bestMid = mid;
 			best = alt;
 		}
 	}
 
-	string ans = alcs.recover(bestMid, bestMid, sz(s));
+	string ans = alcs.recover(bestMid, bestMid, s.size());
 	cout << best*2 << '\n';
 	if (best > 0) cout << ans << ans << '\n';
 }
 
-int main() {
-    cin.sync_with_stdio(0); cin.tie(0);
-    cout << fixed << setprecision(10);
-	int t; cin >> t;
-	rep(i, 0, t) {
-		cout << "Case #" << i+1 << ": ";
-		run();
-	}
-    return 0;
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0), cout.tie(0);
+    #define Task        "test"
+    if(fopen(Task".inp", "r")) {
+        freopen(Task".inp", "r", stdin);
+        freopen(Task".out", "w", stdout);
+    }
+    int T; cin >> T;
+    for(int i = 1; i <= T; ++i) {
+        cout << "Case #" << i << ": ";
+        solve();
+    }
 }
