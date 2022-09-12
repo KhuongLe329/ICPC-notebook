@@ -76,6 +76,7 @@ int main() {
         if(x < 0) tx = 0, x = -x;
         if(y < 0) ty = 0, y = -y;
         G.add(x - 1, tx, y - 1, ty);
+        /// at least one of two is chosen
     }
     auto ans = G.solve();
     vector<int> res;
