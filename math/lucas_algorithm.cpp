@@ -10,7 +10,7 @@ using namespace std;
 const int N = int(1e6) + 3;
 typedef pair<ll, ll> pii;
 vector<int> euler(N, -1), primes;
-
+/// calculate nCk % prime p for large (n, k)
 void Genprime() {
  	for(int i = 2;i < N; ++i) {
  		if(euler[i] == -1) {
