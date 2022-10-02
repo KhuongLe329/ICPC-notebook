@@ -1,15 +1,3 @@
-#include <bits/stdc++.h>
-#define pb          emplace_back
-#define ll          long long
-#define fi          first
-#define se          second
-#define mp          make_pair
-
-using namespace std;
-
-const int N = (int)202;
-typedef pair<int, int> pii;
-
 struct MaxMatching {
     int nx, ny;
     vector<vector<int>> adj;
@@ -55,40 +43,3 @@ struct MaxMatching {
         return nx - (int)S.size();
     }
 };
-
-int n, m, x, y, id[N][33], node[2];
-vector<int> v[N];
-
-void ListPrime(int x, vector<int>& v) {
-    for(int i = 2; i * i <= x; ++i) {
-        while(x % i == 0) x /= i, v.pb(i);
-    }
-    if(x > 1) v.pb(x);
-}
-
-int32_t main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0), cout.tie(0);
-    #define Task        "test"
-    if(fopen(Task".inp", "r")) {
-        freopen(Task".inp", "r", stdin);
-        freopen(Task".out", "w", stdout);
-    }
-    cin >> n >> m;
-    for(int i = 1; i <= n; ++i) {
-        cin >> x;
-        ListPrime(x, v[i]);
-        for(int j = 0; j < int(v[i].size()); ++j) id[i][j] = ++node[i & 1];
-    }
-    MaxMatching g(node[1], node[0]);
-    for(int i = 1; i <= m; ++i) {
-        cin >> x >> y;
-        if(y & 1) swap(x, y);
-        for(int j = 0; j < (int)v[x].size(); ++j) {
-            for(int k = 0; k < (int)v[y].size(); ++k) {
-                if(v[x][j] == v[y][k]) g.add(id[x][j], id[y][k]);
-            }
-        }
-    }
-    cout << g.get();
-}
